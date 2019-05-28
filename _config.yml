@@ -1,7 +1,7 @@
 # Site settings
-title_left    : ""
-title_right   : "" # default: ""
-description   : ""
+title_left    : "lucas"
+title_right   : "loo" # default: ""
+description   : "blog about nothing important"
 keywords      : ""
 url           : https://lucasloo.github.io # site url
 baseurl       : "" # apply repo name like "/myproject" if used under gh-pages branch, else (under master branch) just leave empty/blank
