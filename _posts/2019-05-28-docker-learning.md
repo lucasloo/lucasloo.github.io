@@ -1,4 +1,10 @@
-###Docker Learning
+---
+layout: post
+title: docker learning
+comments: true
+description: "docker learning"
+keywords: "docker"
+---
 
 1. Orientation
 
