@@ -143,4 +143,10 @@ docker run username/repository:tag                   # Run image from a registry
    journalctl -u docker.service -n 100
    ```
    
+   get inside a container
+   
+   ```shell
+   docker exec -it <container name> /bin/bash
+   ```
+   
    
