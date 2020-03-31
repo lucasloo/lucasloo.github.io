@@ -127,3 +127,66 @@ Ensures that only one object of a particular class is ever created.
 
     according to Joshua Bloch, Effective Java 2nd Edition p.18
 
+
+
+### Simple Factory Pattern
+
+Simple factory pattern, aka static factory method, represents a pattern that a static factory creates different products based on different parameters.
+
+![../_images/SimpleFactory.jpg](https://design-patterns.readthedocs.io/zh_CN/latest/_images/SimpleFactory.jpg)
+
+- Product: An abstract product which describes the common behavior of all actual products.
+
+  - ```java
+    public interface Product {
+      public void use();
+    }
+    ```
+
+- ConcreteProductA: An actual product
+
+  - ```java
+    public class ConcreteProductA implements Product {
+      @Override
+      public void use() {
+        // behavior A
+      }
+    }
+    ```
+
+- ConcreteProductB: An actual product
+
+  - ```java
+    public class ConcreteProductB implements Product {
+      @Override
+      public void use() {
+        // behavior B
+      }
+    }
+    ```
+
+- Factory: in charge of creating all products
+
+  - ```java
+    public class Factory {
+      public static Product getProduct(String productName) {
+        if ("A".equals(productName)) {
+          return new ConcreteProductA();
+        }
+        if ("B".equals(productName)) {
+          return new ConcreteProductB();
+        }
+        return null;
+      }
+    }
+    ```
+
+#### Pros
+
+- Users do not need to know how to create the products.
+- Users do not need to know the exact class they are creating, given the right parameters, the product with the expected behavior will be delivered to the user.
+
+#### Cons
+
+- Factory has too much responsibility. The complexity of the factory will increase with the growth of product amount.
+- Hard to scale up. Every time you create a new products, you have to change the logic in the facotory.
