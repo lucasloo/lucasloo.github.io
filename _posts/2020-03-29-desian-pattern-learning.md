@@ -189,4 +189,79 @@ Simple factory pattern, aka static factory method, represents a pattern that a s
 #### Cons
 
 - Factory has too much responsibility. The complexity of the factory will increase with the growth of product amount.
-- Hard to scale up. Every time you create a new products, you have to change the logic in the facotory.
+- Hard to scale up. Every time you create a different type of product, you have to change the logic in the factory.
+
+
+
+### Factory method pattern
+
+Define an interface for creating **an** object, but let the subclasses decide which class to instantiate.
+
+Differs from Simple factory pattern, different products are created by different factories.
+
+![../_images/FactoryMethod.jpg](https://design-patterns.readthedocs.io/zh_CN/latest/_images/FactoryMethod.jpg)
+
+- Product: An abstract product which describes the common behavior of all actual products.
+
+  - ```java
+    public interface Product {
+      public void use();
+    }
+    ```
+
+- ConcreteProduct: An actual product
+
+  - ```java
+    public class ConcreteProduct implements Product {
+      @Override
+      public void use() {
+        // behavior
+      }
+    }
+    ```
+
+- Factory: An abstract factory
+
+  - ```java
+    public interface Factory {
+      public Product factoryMethod();
+    }
+    ```
+
+- ConcreteFactory: An actual factory
+
+  - ```java
+    public class ConcreteFactory implements Factory {
+      @Override
+      public Product factoryMethod() {
+        return new ConcreteProduct();
+      }
+    }
+    ```
+
+#### Pros
+
+- All the pros for **Simple Factory Pattern**.
+- Complexity of the Factory is spread through the concrete factories.
+- Easy to scale up, just need to add new concrete products and concrete factories which implement the same interface.
+
+#### Cons
+
+- More classes for the system to process, increase the complexity of the system.
+- System will be more abstract and harder to understand.
+
+
+
+### Abstract Factory Pattern
+
+Provide an interface for creating **families** of related or dependent objects without specifying their concrete classes.
+
+![../_images/AbatractFactory.jpg](https://design-patterns.readthedocs.io/zh_CN/latest/_images/AbatractFactory.jpg)
+
+- Differences between Factory Method and Abstract Factory (https://dzone.com/articles/factory-method-vs-abstract)
+  - **One product vs Set of many**
+  - **Inheritance vs Composition** (CONFUSING)
+  - **Method vs full class (object)**
+    - Factory Method is *just a method* while Abstract Factory is an *object*. The *purpose* of a Class having factory method is *not just create* objects, it does other work also, *only a method is responsible* for *creating* object. In Abstract Factory, the *whole purpose* of the class is to *create family of objects*.
+  - **Level of abstraction**
+    - Abstract Factory is one level *higher in abstraction* than Factory Method. Factory Method *abstracts the way objects are created*, while Abstract Factory also *abstracts the way factories are created* which in turn abstracts the way objects are created.
