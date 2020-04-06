@@ -265,3 +265,95 @@ Provide an interface for creating **families** of related or dependent objects w
     - Factory Method is *just a method* while Abstract Factory is an *object*. The *purpose* of a Class having factory method is *not just create* objects, it does other work also, *only a method is responsible* for *creating* object. In Abstract Factory, the *whole purpose* of the class is to *create family of objects*.
   - **Level of abstraction**
     - Abstract Factory is one level *higher in abstraction* than Factory Method. Factory Method *abstracts the way objects are created*, while Abstract Factory also *abstracts the way factories are created* which in turn abstracts the way objects are created.
+
+### Builder
+
+Allows you to create different flavors of an object while avoiding **constructor pollution**(too many parameters).
+
+```java
+public Hero(Profession profession, String name, HairType hairType, HairColor hairColor, Armor armor, Weapon weapon) {
+}
+```
+
+ ![../_images/Builder.jpg](https://design-patterns.readthedocs.io/zh_CN/latest/_images/Builder.jpg)
+
+- Product:
+
+  - ```java
+    public class Product {
+      private Object partA;
+      private Object partB;
+    }
+    ```
+
+- Builder: Abstract builder
+
+  - ```java
+    public interface Builder {
+      private Product product;
+      public void buildPartA(Object paramA);
+      public void buildPartB(Object paramB);
+      public Product getResult();
+    }
+    ```
+
+- ConcreteBuilder: Actual builder
+
+  - ```java
+    public class ConcreteBuilder implements Builder {
+      private Product product = new Product();
+      public void buildPartA(Object paramA) {
+        prodcut.setPartA(paramA);
+      }
+      public void buildPartB(Object paramB) {
+        product.setPartB(paramB);
+      }
+      public Product getResult() {
+        return product;
+      }
+    }
+    ```
+
+- Director: 
+
+  - ```java
+    public class Director {
+      private Builder builder;
+      public Director (Builder builder) {
+        this.builder = builder;
+      }
+      public void setBuilder(Builder builder) {
+        this.builder = builder;
+      }
+      public Product construct() {
+        return builder.getResult();
+      }
+    }
+    ```
+
+- Usage:
+
+  - ```java
+    Builder builderA = new ConcreteBuilder();
+    builderA.buildPartA(new Object());
+    Builder builderB = new ConcreteBuilder();
+    builderB.buildPartB(new Object());
+    Director director = new Director();
+    // use builderA to construct productA
+    director.setBuilder(builderA);
+    Product productA = director.construct();
+    // use builderB to construct productB
+    director.setBuilder(builderB);
+    Product productB = director.construct();
+    ```
+
+
+
+## Structural Patterns
+
+### Adapter
+
+Adapter pattern lets you wrap an otherwise incompatible object in an adapter to make it compatible with another class.
+
+
+
