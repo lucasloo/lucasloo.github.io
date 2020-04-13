@@ -44,7 +44,7 @@ public Boolean(boolean value) {
   Constructor constructor = new Constructor(A, B ...);
   ```
 
-- an alternatice is the JavaBeans patterns. Using getter and setter will make it easy. But a JavaBean my be in an inconsistent sate partway through its construction. Precludes the possibility of making a class immutable and requires extra effort to ensure thread safety.
+- an alternative is the JavaBeans patterns. Using getter and setter will make it easy. But a JavaBean my be in an inconsistent sate partway through its construction. Precludes the possibility of making a class immutable and requires extra effort to ensure thread safety.
 
 - Builder Pattern
 
@@ -138,3 +138,77 @@ public Boolean(boolean value) {
   - Cons
 
     - extra cost creating builder (in performance-critical situation)
+
+## Item3: Enforce the singleton property with a private constructor or an enum type
+
+check the design pattern learning singleton part.
+
+## Item4: Enforce noninstantiability with a private constructor
+
+A class with a grouping of static methods and static fields such as a utility class or a factory. Such classes were not designed to be instantiated. 
+
+Attempting to enforce noninstantiability by making a class abstract does not work. Subclasses can be instantiated. And it mislead people into thinking the class was designed to inheritance.
+
+Including a private constructor can make a class noninstantiable.
+
+```java
+public class UtilityClass {
+    private UtilityClass() {
+        throw new AssertionError();
+    }
+}
+```
+
+- **private constructor** can suppress default constructor, hence outside of the class will not be able to new it.
+- **throw AssertionError** provides insurance in case the constructor is accidentally invoked from within the class.
+
+- **good side effect**: this idiom prevents the class from being subclassed because there is no default constructor available in UtilityClass.
+
+## Item5: Prefer dependency injection to hardwiring resources
+
+Static utility classes and singletons are inappropriate for  classes whose behavior is parameterized by an underlying resource.
+
+In order to support multiple instances of the class, a simple pattern called **Dependency Injection** can be used. It means passing the resource into the constructor when creating a new instance. **Dependency Injection** is applicable to **constructors**, **static factories**, and **builders**.
+
+Methods above required passing resource directly. Another useful variant of the pattern is to pass a resource factory to the constructor. These factories embody the **Factory Method Pattern**.(check the `Supplier<T>` interface in JAVA8)
+
+## Item6: Avoid creating unnecessary objects
+
+1. cache the expensive **immutable** object
+
+   ```java
+   static boolean isRomanNumeral(String s) {
+       return s.matches("...");
+   }
+   ```
+
+   the problem is that `String.matches()` internally creates a `Pattern` instance every it is invoked.
+
+   the right way should be:
+
+   ```java
+   public calss RomanNumerals {
+       private static final Pattern ROMAN = Pattern.compile("...");
+       static boolean isRomanNumeral(String s) {
+           return ROMAN.matcher(s).matches();
+       }
+   }
+   ```
+
+   lazily initializing is not recommended. Since it would complicate the implementation with no measurable performance improvement.
+
+2. cache the expensive **without states object**
+
+   Consider **Adapter**. Because an adapter has no state beyond that of its backing object, there is no need to create more than one instance of a given adapter to a given object.
+
+   For example, the `keySet()` method of the `map` interface returns a `Set` adapter of the `Map` object to show all the keys in the map. It do not need to create a set every time it is called because the set should be the same set and should always follow the states of the map itself.
+
+3. autoboxing
+
+   prefer primitives to boxed primitives, and watch out for unintentional autoboxing.
+
+4. use a pool to maintain extremely heavyweight
+
+   for example, database connection.
+
+**VERY IMPORTANT**, small objects should always create than reuse. Creating additional objects is a good way to enhance the clarity, simplicity, or power of a program.
